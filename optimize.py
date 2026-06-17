@@ -24,6 +24,7 @@ def objective(trial, base_config):
     config["model"] = config.get("model", {}).copy()
     config["model"]["architecture"] = architecture
     config["model"]["name_or_path"] = model_name
+    config["model"]["freeze_backbone"] = True
 
     config["training"] = config.get("training", {}).copy()
     config["training"]["learning_rate"] = lr

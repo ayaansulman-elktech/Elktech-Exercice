@@ -47,6 +47,29 @@ class Trainer:
             # Log all config parameters
             mlflow.log_dict(self.config, "config.yaml")
             
+            # Log Model Size (Number of parameters)
+            total_params = sum(p.numel() for p in self.model.parameters())
+            trainable_params = sum(p.numel() for p in self.model.parameters() if p.requires_grad)
+            mlflow.log_params({
+                "total_params": total_params,
+                "trainable_params": trainable_params,
+                "model_size_mb": total_params * 4 / (1024**2) # Approx size in MB for FP32
+            })
+
+            # Benchmark Inference Latency
+            print("Benchmarking inference latency...")
+            self.model.eval()
+            dummy_input = torch.rand(1, 3, self.config.get("dataset", {}).get("image_size", 224), 
+                                     self.config.get("dataset", {}).get("image_size", 224)).to(self.device)
+            import time
+            start_time = time.time()
+            for _ in range(50):
+                with torch.no_grad():
+                    _ = self.model(dummy_input)
+            latency = (time.time() - start_time) / 50
+            mlflow.log_metric("inference_latency_ms", latency * 1000)
+            print(f"Average Inference Latency: {latency*1000:.2f} ms")
+
             # Flatten config for easier viewing in MLflow UI
             flat_config = {}
             for k, v in self.config.items():

@@ -1,20 +1,21 @@
 experiment:
-  name: "baseline_detr"
+  name: "final_master_model"
   seed: 42
 
 model:
-  architecture: "detr"
-  name_or_path: "facebook/detr-resnet-50"
+  architecture: "yolos"
+  name_or_path: "hustvl/yolos-tiny"
   num_labels: 91
   inference_threshold: 0.9
+  freeze_backbone: true
 
 dataset:
   train_path: "data/train"
   val_path: "data/val"
-  image_size: 480
+  image_size: 224
 
 training:
-  learning_rate: 0.0001
-  batch_size: 4
+  learning_rate: 0.00006
+  batch_size: 2
   weight_decay: 0.0001
   epochs: 5

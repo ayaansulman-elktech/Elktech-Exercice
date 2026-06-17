@@ -25,5 +25,16 @@ class ModelFactory:
             num_labels=num_labels,
             ignore_mismatched_sizes=True
         )
+
+        # Optimization for CPU: Freeze the backbone to speed up training
+        if model_config.get("freeze_backbone", False):
+            print("Freezing model backbone...")
+            # For DETR and YOLOS, the backbone is usually accessible via model.model.backbone or model.vit
+            if hasattr(model, "model") and hasattr(model.model, "backbone"):
+                for param in model.model.backbone.parameters():
+                    param.requires_grad = False
+            elif hasattr(model, "vit"):
+                for param in model.vit.parameters():
+                    param.requires_grad = False
         
         return processor, model
