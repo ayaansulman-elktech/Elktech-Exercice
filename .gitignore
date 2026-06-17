@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environments
+.venv/
+venv/
+env/
+.env
+
+# Datasets
+data/
+
+# MLflow and Experiments
+mlruns/
+mlruns.db
+
+# Models and Output
+models_output/
+*.pt
+*.mlpackage
+*.mlmodel
+
+# Xcode / iOS
+build/
+DerivedData/
+*.xcodeproj/
+*.xcworkspace/
